@@ -16,6 +16,15 @@ void UMP_LANMenu::NativeOnInitialized()
 	Button_Join->OnClicked.AddDynamic(this, &ThisClass::JoinButtonClicked);
 }
 
+void UMP_LANMenu::HostButtonClicked()
+{
+	FInputModeGameOnly InputMode;
+	GetOwningPlayer()->SetInputMode(InputMode);
+	GetOwningPlayer()->SetShowMouseCursor(false);
+	
+	UGameplayStatics::OpenLevelBySoftObjectPtr(this, HostingLevel, true, TEXT("listen"));
+}
+
 void UMP_LANMenu::JoinButtonClicked()
 {
 	FInputModeGameOnly InputMode;
@@ -26,11 +35,4 @@ void UMP_LANMenu::JoinButtonClicked()
 	UGameplayStatics::OpenLevel(this, *Address);
 }
 
-void UMP_LANMenu::HostButtonClicked()
-{
-	FInputModeGameOnly InputMode;
-	GetOwningPlayer()->SetInputMode(InputMode);
-	GetOwningPlayer()->SetShowMouseCursor(false);
-	
-	UGameplayStatics::OpenLevelBySoftObjectPtr(this, HostingLevel, true, TEXT("listen"));
-}
+

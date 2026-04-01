@@ -33,8 +33,10 @@ private:
 	TSoftObjectPtr<UWorld> HostingLevel;
 	
 	UFUNCTION()
-	void JoinButtonClicked();
+	void HostButtonClicked();
 	
 	UFUNCTION()
-	void HostButtonClicked();
+	void JoinButtonClicked();
+	
+
 };
