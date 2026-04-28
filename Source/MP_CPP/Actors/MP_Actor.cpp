@@ -10,10 +10,12 @@ AMP_Actor::AMP_Actor()
 	SetReplicatingMovement(true);
 }
 
-// Called when the game starts or when spawned
 void AMP_Actor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	const bool bAuth = HasAuthority();
+	const ENetRole LocalRole = GetLocalRole();
 	
 }
 
