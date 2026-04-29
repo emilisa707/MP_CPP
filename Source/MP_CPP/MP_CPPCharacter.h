@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interaction/MP_Player.h"
 #include "Logging/LogMacros.h"
 #include "MP_CPPCharacter.generated.h"
 
@@ -19,7 +20,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
  *  Implements a controllable orbiting camera
  */
 UCLASS(abstract)
-class AMP_CPPCharacter : public ACharacter
+class AMP_CPPCharacter : public ACharacter, public IMP_Player
 {
 	GENERATED_BODY()
 
@@ -53,8 +54,10 @@ public:
 
 	/** Constructor */
 	AMP_CPPCharacter();	
-
-protected:
+	
+	/** IMP_Player Interface */
+	virtual USkeletalMeshComponent* GetSkeletalMesh_Implementation() const override;
+	virtual void GrantArmor_Implementation(float ArmorAmount) override;
 
 	/** Initialize input action bindings */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -92,5 +95,22 @@ public:
 
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	
+	//////////// Crash Course //////////////
+public:
+	// 1. Override GetLifetimeReplicatedProps
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+	
+private:
+	// 1. Add the UPROPERTY macro with the Replicated specifier
+	
+	UPROPERTY(Replicated, VisibleAnywhere, Category = "Player Stats")
+	float Armor;
+	
+	/** Mouse Look Input Action */
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* GeneralInput;
+	
+	void OnGeneralInput();
 };
 

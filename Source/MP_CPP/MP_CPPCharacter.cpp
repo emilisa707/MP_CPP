@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "MP_CPP.h"
+#include "Net/UnrealNetwork.h"
 
 AMP_CPPCharacter::AMP_CPPCharacter()
 {
@@ -50,6 +51,16 @@ AMP_CPPCharacter::AMP_CPPCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+USkeletalMeshComponent* AMP_CPPCharacter::GetSkeletalMesh_Implementation() const
+{
+	return GetMesh();
+}
+
+void AMP_CPPCharacter::GrantArmor_Implementation(float ArmorAmount)
+{
+	Armor = ArmorAmount;
+}
+
 void AMP_CPPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
@@ -65,6 +76,9 @@ void AMP_CPPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMP_CPPCharacter::Look);
+		
+		// General Input for testing
+		EnhancedInputComponent->BindAction(GeneralInput, ETriggerEvent::Started, this, &AMP_CPPCharacter::OnGeneralInput);
 	}
 	else
 	{
@@ -130,4 +144,17 @@ void AMP_CPPCharacter::DoJumpEnd()
 {
 	// signal the character to stop jumping
 	StopJumping();
+}
+
+void AMP_CPPCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	// 3. Call DOREPLIFETIME
+	DOREPLIFETIME(ThisClass, Armor);
+}
+
+void AMP_CPPCharacter::OnGeneralInput()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("General Input Pressed!"));
 }

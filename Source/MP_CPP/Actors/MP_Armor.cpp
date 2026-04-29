@@ -1,7 +1,7 @@
 ﻿#include "MP_Armor.h"
 
 #include "Components/SphereComponent.h"
-#include "GameFramework/Character.h"
+#include "Interaction/MP_Player.h"
 
 
 // Sets default values
@@ -36,13 +36,18 @@ void AMP_Armor::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 	
-	ACharacter* OverlappedCharacter = Cast<ACharacter>(OtherActor);
-	if (HasAuthority() && IsValid(OverlappedCharacter))
+	if (!OtherActor->HasAuthority()) return;
+	
+	if (OtherActor->Implements<UMP_Player>())
 	{
+		USkeletalMeshComponent* Mesh = IMP_Player::Execute_GetSkeletalMesh(OtherActor);
+		
 		//AttachToActor(OtherActor, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-		SphereMesh->AttachToComponent(OverlappedCharacter->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("head"));
-		SphereFootL->AttachToComponent(OverlappedCharacter->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("foot_L"));
-		SphereFootR->AttachToComponent(OverlappedCharacter->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("foot_R"));
+		SphereMesh->AttachToComponent(Mesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("head"));
+		SphereFootL->AttachToComponent(Mesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("foot_l"));
+		SphereFootR->AttachToComponent(Mesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("foot_r"));
+		
+		IMP_Player::Execute_GrantArmor(OtherActor, 25.f);
 	}
 }
 
