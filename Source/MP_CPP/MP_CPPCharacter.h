@@ -58,6 +58,7 @@ public:
 	/** IMP_Player Interface */
 	virtual USkeletalMeshComponent* GetSkeletalMesh_Implementation() const override;
 	virtual void GrantArmor_Implementation(float ArmorAmount) override;
+	virtual void IncrementPickupCount_Implementation() override;
 
 	/** Initialize input action bindings */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -104,13 +105,22 @@ public:
 private:
 	// 1. Add the UPROPERTY macro with the Replicated specifier
 	
-	UPROPERTY(Replicated, VisibleAnywhere, Category = "Player Stats")
+	UPROPERTY(ReplicatedUsing=OnRep_Armor, VisibleAnywhere, Category="Player Stats")
 	float Armor;
+	
+	UPROPERTY(ReplicatedUsing=OnRep_PickupCount, VisibleAnywhere, Category="Player Stats")
+	int32 PickupCount;
 	
 	/** Mouse Look Input Action */
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* GeneralInput;
 	
 	void OnGeneralInput();
+	
+	UFUNCTION()
+	void OnRep_Armor();
+	
+	UFUNCTION()
+	void OnRep_PickupCount();
 };
 

@@ -8,6 +8,11 @@
 AMP_Armor::AMP_Armor()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	
+	bNetLoadOnClient = true;
+	bReplicates = true;
+	SetReplicatingMovement(true);
+	
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent")));
 	
 	SphereMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SphereMesh"));

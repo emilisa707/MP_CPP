@@ -61,6 +61,11 @@ void AMP_CPPCharacter::GrantArmor_Implementation(float ArmorAmount)
 	Armor = ArmorAmount;
 }
 
+void AMP_CPPCharacter::IncrementPickupCount_Implementation()
+{
+	++PickupCount;
+}
+
 void AMP_CPPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
@@ -152,9 +157,20 @@ void AMP_CPPCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 	
 	// 3. Call DOREPLIFETIME
 	DOREPLIFETIME(ThisClass, Armor);
+	DOREPLIFETIME(ThisClass, PickupCount);
 }
 
 void AMP_CPPCharacter::OnGeneralInput()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("General Input Pressed!"));
+}
+
+void AMP_CPPCharacter::OnRep_Armor()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Armor updated: %f"), Armor));
+}
+
+void AMP_CPPCharacter::OnRep_PickupCount()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Pickup Count updated: %d"), PickupCount));
 }

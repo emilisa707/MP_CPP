@@ -24,4 +24,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MP_Player")
 	void GrantArmor(float AmorAmount);
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MP_Player")
+	void IncrementPickupCount();
 };
