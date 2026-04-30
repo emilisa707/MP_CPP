@@ -156,8 +156,10 @@ void AMP_CPPCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
 	// 3. Call DOREPLIFETIME
-	DOREPLIFETIME(ThisClass, Armor);
+	//DOREPLIFETIME(ThisClass, Armor);
 	DOREPLIFETIME(ThisClass, PickupCount);
+	
+	DOREPLIFETIME_CONDITION(ThisClass, Armor, COND_AutonomousOnly);
 }
 
 void AMP_CPPCharacter::OnGeneralInput()
