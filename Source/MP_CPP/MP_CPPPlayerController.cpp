@@ -7,11 +7,15 @@
 #include "InputMappingContext.h"
 #include "Blueprint/UserWidget.h"
 #include "MP_CPP.h"
+#include "Player/MP_PlayerState.h"
 #include "Widgets/Input/SVirtualJoystick.h"
+#include "UI/MP_PickupCountWidget.h"
 
 void AMP_CPPPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	if (!IsLocalController()) return;
 
 	// only spawn touch controls on local player controllers
 	if (SVirtualJoystick::ShouldDisplayTouchInterface() && IsLocalPlayerController())
@@ -30,6 +34,18 @@ void AMP_CPPPlayerController::BeginPlay()
 
 		}
 
+	}
+	
+	PickupCountWidget = CreateWidget<UMP_PickupCountWidget>(this, PickupCountWidgetClass);
+	if (PickupCountWidget) PickupCountWidget->AddToViewport();
+	
+	if (HasAuthority())
+	{
+		AMP_PlayerState* MP_PlayerState = GetPlayerState<AMP_PlayerState>();
+		if (IsValid(MP_PlayerState))
+		{
+			MP_PlayerState->OnPickupCountChanged.AddDynamic(this, &ThisClass::OnPickupCountChanged);
+		}
 	}
 }
 
@@ -58,4 +74,22 @@ void AMP_CPPPlayerController::SetupInputComponent()
 			}
 		}
 	}
+}
+
+void AMP_CPPPlayerController::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	if (!IsLocalController()) return;
+	
+	AMP_PlayerState* MP_PlayerState = GetPlayerState<AMP_PlayerState>();
+	if (!IsValid(MP_PlayerState)) return;
+	
+	MP_PlayerState->OnPickupCountChanged.AddDynamic(this, &ThisClass::OnPickupCountChanged);
+}
+
+void AMP_CPPPlayerController::OnPickupCountChanged(int32 Count)
+{
+	if (!IsValid(PickupCountWidget)) return;
+	
+	PickupCountWidget->SetPickupCount(Count);
 }

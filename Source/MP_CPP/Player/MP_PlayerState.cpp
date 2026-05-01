@@ -9,3 +9,14 @@ void AMP_PlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>
 	DOREPLIFETIME(ThisClass, NumPickups);
 
 }
+
+void AMP_PlayerState::SetNumPickups(const int32 NewNumPickups)
+{
+	NumPickups = NewNumPickups;
+	OnPickupCountChanged.Broadcast(NumPickups);
+}
+
+void AMP_PlayerState::OnRep_NumPickups()
+{
+	OnPickupCountChanged.Broadcast(NumPickups);
+}
