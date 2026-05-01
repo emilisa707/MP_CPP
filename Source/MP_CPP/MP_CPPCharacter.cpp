@@ -196,6 +196,8 @@ void AMP_CPPCharacter::OnGeneralInput()
 	bReplicatePickupCount = !bReplicatePickupCount;
 	
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("bReplicatePickupCount toggled: ") + FString(bReplicatePickupCount ? TEXT("true") : TEXT("false")));
+	
+	Server_PrintMessage("Please run this on the server");
 }
 
 void AMP_CPPCharacter::OnRep_Armor()
@@ -217,9 +219,7 @@ void AMP_CPPCharacter::OnRPCDelayTimer()
 	GetWorld()->SpawnActor<AMP_Actor>(GetActorLocation(), GetActorRotation(), SpawnParams);
 }
 
-void AMP_CPPCharacter::Client_PrintMessage_Implementation(const FString& Message)
+void AMP_CPPCharacter::Server_PrintMessage_Implementation(const FString& Message)
 {
-	FString MessageStr = HasAuthority() ? "Server: " : "Client: ";
-	MessageStr += Message;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Message from %s"), *MessageStr));
+	
 }
