@@ -1,0 +1,31 @@
+﻿
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/GameMode.h"
+#include "MP_GameMode.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class MP_CPP_API AMP_GameMode : public AGameMode
+{
+	GENERATED_BODY()
+	
+public:
+	AMP_GameMode();
+	
+	virtual void StartMatch() override;
+	
+	protected:
+	virtual void BeginPlay() override;
+	
+private:
+	FTimerHandle MatchStartTimer;
+	
+	UPROPERTY(EditDefaultsOnly)
+	float MatchStartDelay;
+	
+	void StartDelayFinished();
+};
