@@ -222,6 +222,11 @@ void AMP_CPPCharacter::OnRPCDelayTimer()
 	Multicast_PrintMessage("Print this on the server and all relevant client");
 }
 
+bool AMP_CPPCharacter::Server_PrintMessage_Validate(const FString& Message)
+{
+	return !Message.IsEmpty();
+}
+
 void AMP_CPPCharacter::Multicast_PrintMessage_Implementation(const FString& Message)
 {
 	FString MessageStr = HasAuthority() ? "Server: " : "Client: ";
