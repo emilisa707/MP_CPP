@@ -213,10 +213,20 @@ void AMP_CPPCharacter::OnRep_PickupCount()
 void AMP_CPPCharacter::OnRPCDelayTimer()
 {
 	if (!HasAuthority()) return;
-	
+	/*
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 	GetWorld()->SpawnActor<AMP_Actor>(GetActorLocation(), GetActorRotation(), SpawnParams);
+	*/
+	
+	Multicast_PrintMessage("Print this on the server and all relevant client");
+}
+
+void AMP_CPPCharacter::Multicast_PrintMessage_Implementation(const FString& Message)
+{
+	FString MessageStr = HasAuthority() ? "Server: " : "Client: ";
+	MessageStr += GetName();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Message from %s"), *MessageStr));
 }
 
 void AMP_CPPCharacter::Server_PrintMessage_Implementation(const FString& Message)
