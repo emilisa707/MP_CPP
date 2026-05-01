@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Interaction/MP_Player.h"
 #include "Logging/LogMacros.h"
+#include "Net/UnrealNetwork.h"
 #include "MP_CPPCharacter.generated.h"
 
 class USpringArmComponent;
@@ -101,6 +102,7 @@ public:
 public:
 	// 1. Override GetLifetimeReplicatedProps
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void PreReplication(IRepChangedPropertyTracker& ChangedPropertyTracker) override;
 	
 private:
 	// 1. Add the UPROPERTY macro with the Replicated specifier
@@ -122,5 +124,6 @@ private:
 	
 	UFUNCTION()
 	void OnRep_PickupCount();
+	
+	bool bReplicatePickupCount;
 };
-
