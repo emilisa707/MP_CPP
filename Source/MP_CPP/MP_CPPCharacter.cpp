@@ -9,6 +9,8 @@
 #include "InputActionValue.h"
 #include "MP_CPP.h"
 #include "Components/MP_HealthComponent.h"
+#include "Game/MP_GameState.h"
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 
 AMP_CPPCharacter::AMP_CPPCharacter()
@@ -184,16 +186,30 @@ void AMP_CPPCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	GetWorldTimerManager().SetTimer(RPCDelayTimer, this, &AMP_CPPCharacter::OnRPCDelayTimer, 5.f, false);
+	//GetWorldTimerManager().SetTimer(RPCDelayTimer, this, &AMP_CPPCharacter::OnRPCDelayTimer, 5.f, false);
 }
 
 void AMP_CPPCharacter::OnGeneralInput()
 {
-	bReplicatePickupCount = !bReplicatePickupCount;
+	//bReplicatePickupCount = !bReplicatePickupCount;
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("bReplicatePickupCount toggled: ") + FString(bReplicatePickupCount ? TEXT("true") : TEXT("false")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("bReplicatePickupCount toggled: ") + FString(bReplicatePickupCount ? TEXT("true") : TEXT("false")));
 	
-	Server_PrintMessage("Please run this on the server");
+	//Server_PrintMessage("Please run this on the server");
+	
+	AMP_GameState* GM = Cast<AMP_GameState>(UGameplayStatics::GetGameState(this));
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (IsValid(GM))
+	{
+		if (GM->IsTeamOne(PC))
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Player is on Team One"));
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Player is on Team Two"));
+		}
+	}
 }
 
 void AMP_CPPCharacter::OnRep_Armor()

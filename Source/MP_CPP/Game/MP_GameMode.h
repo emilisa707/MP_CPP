@@ -17,8 +17,9 @@ public:
 	AMP_GameMode();
 	
 	virtual void StartMatch() override;
+	virtual void PostLogin(APlayerController* NewPlayer) override;
 	
-	protected:
+protected:
 	virtual void BeginPlay() override;
 	
 private:
