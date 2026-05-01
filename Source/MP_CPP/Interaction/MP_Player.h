@@ -27,4 +27,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MP_Player")
 	void IncrementPickupCount();
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MP_Player")
+	void IncreaseHealth(float HealthAmount);
 };

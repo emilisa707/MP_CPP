@@ -27,4 +27,7 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<USphereComponent> SphereCollision;
+	
+	UPROPERTY(EditAnywhere, Category = "Components")
+	float HealthAmount = 20.f;
 };

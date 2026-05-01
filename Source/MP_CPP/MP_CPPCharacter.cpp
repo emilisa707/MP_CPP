@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "MP_CPP.h"
+#include "Components/MP_HealthComponent.h"
 #include "Net/UnrealNetwork.h"
 
 AMP_CPPCharacter::AMP_CPPCharacter()
@@ -49,6 +50,8 @@ AMP_CPPCharacter::AMP_CPPCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+	
+	HealthComponent = CreateDefaultSubobject<UMP_HealthComponent>(TEXT("HealthComponent"));
 }
 
 USkeletalMeshComponent* AMP_CPPCharacter::GetSkeletalMesh_Implementation() const
@@ -64,6 +67,14 @@ void AMP_CPPCharacter::GrantArmor_Implementation(float ArmorAmount)
 void AMP_CPPCharacter::IncrementPickupCount_Implementation()
 {
 	++PickupCount;
+}
+
+void AMP_CPPCharacter::IncreaseHealth_Implementation(float HealthAmount)
+{
+	if (HealthComponent)
+	{
+		HealthComponent->SetHealth(HealthComponent->GetHealth() + HealthAmount);
+	}
 }
 
 void AMP_CPPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

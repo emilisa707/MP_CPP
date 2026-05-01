@@ -9,6 +9,7 @@
 #include "Net/UnrealNetwork.h"
 #include "MP_CPPCharacter.generated.h"
 
+class UMP_HealthComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
@@ -60,6 +61,7 @@ public:
 	virtual USkeletalMeshComponent* GetSkeletalMesh_Implementation() const override;
 	virtual void GrantArmor_Implementation(float ArmorAmount) override;
 	virtual void IncrementPickupCount_Implementation() override;
+	virtual void IncreaseHealth_Implementation(float HealthAmount) override;
 
 	/** Initialize input action bindings */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -126,4 +128,7 @@ private:
 	void OnRep_PickupCount();
 	
 	bool bReplicatePickupCount;
+	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UMP_HealthComponent> HealthComponent;
 };
