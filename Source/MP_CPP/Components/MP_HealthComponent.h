@@ -14,7 +14,6 @@ public:
 	UMP_HealthComponent();
 	
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
-	virtual void BeginPlay() override;
 	
 	void SetHealth(float NewHealth) { Health = NewHealth; }
 	float GetHealth() const { return Health; }

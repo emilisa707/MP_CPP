@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "MP_CPP.h"
+#include "Actors/MP_Actor.h"
 #include "Components/MP_HealthComponent.h"
 #include "Net/UnrealNetwork.h"
 
@@ -183,6 +184,13 @@ inline void AMP_CPPCharacter::PreReplication(IRepChangedPropertyTracker& Changed
 	DOREPLIFETIME_ACTIVE_OVERRIDE(ThisClass, PickupCount, bReplicatePickupCount);
 }
 
+void AMP_CPPCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	GetWorldTimerManager().SetTimer(RPCDelayTimer, this, &AMP_CPPCharacter::OnRPCDelayTimer, 5.f, false);
+}
+
 void AMP_CPPCharacter::OnGeneralInput()
 {
 	bReplicatePickupCount = !bReplicatePickupCount;
@@ -198,4 +206,20 @@ void AMP_CPPCharacter::OnRep_Armor()
 void AMP_CPPCharacter::OnRep_PickupCount()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Pickup Count updated: %d"), PickupCount));
+}
+
+void AMP_CPPCharacter::OnRPCDelayTimer()
+{
+	if (!HasAuthority()) return;
+	
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	GetWorld()->SpawnActor<AMP_Actor>(GetActorLocation(), GetActorRotation(), SpawnParams);
+}
+
+void AMP_CPPCharacter::Client_PrintMessage_Implementation(const FString& Message)
+{
+	FString MessageStr = HasAuthority() ? "Server: " : "Client: ";
+	MessageStr += Message;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Message from %s"), *MessageStr));
 }

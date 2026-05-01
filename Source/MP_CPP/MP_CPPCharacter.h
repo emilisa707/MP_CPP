@@ -105,6 +105,7 @@ public:
 	// 1. Override GetLifetimeReplicatedProps
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PreReplication(IRepChangedPropertyTracker& ChangedPropertyTracker) override;
+	virtual void BeginPlay() override;
 	
 private:
 	// 1. Add the UPROPERTY macro with the Replicated specifier
@@ -131,4 +132,13 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UMP_HealthComponent> HealthComponent;
+	
+	// Remote Procedure Call (RPC) - Client, Server, and Multicast
+	
+	UFUNCTION(Client, Reliable)
+	void Client_PrintMessage(const FString& Message);
+	
+	FTimerHandle RPCDelayTimer;
+	
+	void OnRPCDelayTimer();
 };

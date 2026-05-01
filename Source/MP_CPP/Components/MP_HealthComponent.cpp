@@ -22,10 +22,3 @@ void UMP_HealthComponent::OnRep_Health()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Health updated: %f"), Health));
 }
 
-
-void UMP_HealthComponent::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-

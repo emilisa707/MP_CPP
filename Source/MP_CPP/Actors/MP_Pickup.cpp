@@ -35,9 +35,3 @@ void AMP_Pickup::NotifyActorBeginOverlap(AActor* OtherActor)
 	}
 }
 
-void AMP_Pickup::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-

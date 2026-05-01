@@ -10,18 +10,21 @@ AMP_Actor::AMP_Actor()
 	SetReplicatingMovement(true);
 }
 
+void AMP_Actor::Client_PrintActorName_Implementation()
+{
+	FString MessageStr = HasAuthority() ? "Server: " : "Client: ";
+	MessageStr += GetName();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Message from %s"), *MessageStr));
+}
+
 void AMP_Actor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	const bool bAuth = HasAuthority();
-	const ENetRole LocalRole = GetLocalRole();
+	if (HasAuthority()
+	{
+		Client_PrintActorName();
+	})
 	
-}
-
-// Called every frame
-void AMP_Actor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 

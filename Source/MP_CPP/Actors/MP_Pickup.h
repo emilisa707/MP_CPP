@@ -18,9 +18,6 @@ public:
 	
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	
-protected:
-	virtual void BeginPlay() override;
-
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UStaticMeshComponent> SphereMesh;

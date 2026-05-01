@@ -15,10 +15,10 @@ class MP_CPP_API AMP_Armor : public AActor
 
 public:
 	AMP_Armor();
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")

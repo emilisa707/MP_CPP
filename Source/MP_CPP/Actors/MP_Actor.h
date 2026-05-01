@@ -11,10 +11,10 @@ class MP_CPP_API AMP_Actor : public AActor
 
 public:
 	AMP_Actor();
+	
+	UFUNCTION(Client, Reliable)
+	void Client_PrintActorName();
 
 protected:
 	virtual void BeginPlay() override;
-
-public:
-	virtual void Tick(float DeltaTime) override;
 };
